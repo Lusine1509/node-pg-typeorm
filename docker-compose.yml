@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+    app:
+        container_name: app_container
+        build:
+            context: .
+        volumes:
+            - ./src/:/app/src/
+        ports:
+            - '3000:3000'
+        depends_on:
+            - postgres_db
+        links:
+            - postgres_db
+    postgres_db:
+        container_name: postgres_container
+        image: 'postgres:13.2'
+        volumes:
+            - ./data/db:/var/lib/postgresql/data
+        environment:
+            POSTGRES_DB: 'shop'
+            POSTGRES_USER: 'postgres'
+            POSTGRES_PASSWORD: 'postgres'
+            POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+            - '5432:5432'
+        restart: always
+
+volumes:
+    postgres_db:
+    app:
